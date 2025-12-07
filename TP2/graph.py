@@ -13,7 +13,6 @@ plt.figure(figsize=(10, 6))
 
 plt.plot(
     df_A["N"], df_A["Temps"],
-    color="green",
     marker="s",          
     markersize=8,
     label="Fonction MaxEtMinA"
@@ -21,7 +20,6 @@ plt.plot(
 
 plt.plot(
     df_B["N"], df_B["Temps"],
-    color="blue",
     marker="s",          
     markersize=8,
     label="Fonction MaxEtMinB"

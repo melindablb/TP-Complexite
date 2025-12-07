@@ -15,8 +15,8 @@ width = 0.35
 
 plt.figure(figsize=(10, 6))
 
-plt.bar(x - width/2, df_A["Compteur"], width, label="Fonction MaxEtMinA", color="green")
-plt.bar(x + width/2, df_B["Compteur"], width, label="Fonction MaxEtMinB", color="blue")
+plt.bar(x - width/2, df_A["Compteur"], width, label="Fonction MaxEtMinA")
+plt.bar(x + width/2, df_B["Compteur"], width, label="Fonction MaxEtMinB")
 
 
 plt.xticks(x, df_A["N"], rotation=0)  

@@ -1,20 +1,60 @@
 #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <intrin.h>
+#include <stdint.h>
+#include <windows.h>
 #include <stdbool.h>
 
+// structure personnalisee pour le temps haute précision sous windows
+typedef struct {
+    long tv_sec;
+    long tv_nsec;
+} high_res_time_t;
 
-int rechElets_Dicho(int tab[], int n, int x){
+// fonctions de timing haute précision pour windows
+void get_high_precision_time(high_res_time_t *ts) {
+    LARGE_INTEGER frequency, counter;
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&counter);
+    ts->tv_sec = (long)(counter.QuadPart / frequency.QuadPart);
+    ts->tv_nsec = (long)(((counter.QuadPart % frequency.QuadPart) * 1000000000LL) / frequency.QuadPart);
+}
+
+double get_time_diff_s(high_res_time_t *start, high_res_time_t *end) {
+    return (end->tv_sec - start->tv_sec) + (end->tv_nsec - start->tv_nsec) / 1e9;
+}
+
+void genereTableauTrieAvecRepetition(long long tab[], long long n) { //genere tableau trie avec repetitions
+    tab[0] = (long long)rand() % 1000L;
+
+    for (long long i = 1; i < n; i++) {
+        tab[i] = tab[i-1] + ((long long)rand() % 5L);
+    }
+}
+
+double rechElets_Dicho(long long tab[], long long n, long long x,int* trouve){
 
     int deb = 0;
     int fin = n-1;
     int m;
 
+    double time_taken;
+    high_res_time_t start, end;
+    get_high_precision_time(&start);
+
     while (deb <= fin){
         m = (deb + fin) / 2;
 
         if (tab[m] == x) {
-            return 1;
+            *trouve=1;
+            get_high_precision_time(&end);
+            time_taken = get_time_diff_s(&start, &end);
+            return time_taken;
         }
         else if (tab[m] < x) {
             deb = m + 1;
@@ -23,44 +63,43 @@ int rechElets_Dicho(int tab[], int n, int x){
             fin = m - 1;
         }
     }
-    return 0;
+    *trouve=0;
+
+    get_high_precision_time(&end);
+    time_taken = get_time_diff_s(&start, &end);
+    return time_taken;
     }
 
 
 int main() {
+    double temps1,temps2;
     srand(time(NULL));
+    long long valeurs_n[10] = {100000, 200000, 400000, 600000, 800000, 1000000, 1200000, 1400000, 1600000, 1800000};
+    int i=0,trouve;
 
-    printf("Recherche dans un tableau trié (valeurs repetées possibles)\n");
-    int n2;
-    printf("Entrez la taille du tableau pour algo2 : ");
-    scanf("%d", &n2);
+    FILE *f = fopen("dicho.csv", "w");
+    fprintf(f, "Algo,N,BestCase,WorstCase\n");
 
-    int *tab2 = malloc(n2 * sizeof(int));
-    if (!tab2) return 1;
+    while (i<10) {
+        printf("\n\nTaille N: %lld ",valeurs_n[i]);
+        long long *tab = malloc(valeurs_n[i] * sizeof(long long));
+        if (!tab) return 1;
 
-    genereTableauTrieAvecRepetition(tab2, n2);
+        genereTableauTrieAvecRepetition(tab,valeurs_n[i]);
 
-    printf("Tableau trie : ");
-    for (int i = 0; i < n2; i++) printf("%d ", tab2[i]);
-    printf("\n");
+        //pire cas
+        temps1=rechElets_Dicho(tab,valeurs_n[i],(tab[(valeurs_n[i])-1]+1000),&trouve);
+        printf("\nPire cas x=%lld, trouve:%d, temps: %.9f\n",tab[(valeurs_n[i])-1]+1,trouve,temps1);
 
-    int x;
-    printf("Entrez la valeur a rechercher : ");
-    scanf("%d", &x);
+        //meilleur cas
+        temps2=rechElets_Dicho(tab,valeurs_n[i],tab[((valeurs_n[i])-1)/2],&trouve);
+        printf("Meilleur cas x=%lld, trouve:%d, temps: %.9f",tab[((valeurs_n[i])-1)/2],trouve,temps2);
 
-    //test algo2
-    clock_t debut = clock();
-    int res = rechElets_Dicho(tab2, n2, x);
-    clock_t fin = clock();
+        fprintf(f,"3,%lld,%.9f,%.9f\n",valeurs_n[i],temps1,temps2);
+        i++;
+        free(tab);
+    }
 
-    double temps = ((double)(fin - debut)) / CLOCKS_PER_SEC;
-
-    if (res == 1)
-        printf("La valeur %d existe dans le tableau.\n", x);
-    else
-        printf("La valeur %d n'existe pas dans le tableau.\n", x);
-    printf("Temps d'exécution : %.6f s\n", temps);
-
-    free(tab2);
-
+    fclose(f);
+    return 0;
 }
