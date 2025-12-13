@@ -48,6 +48,7 @@ int main() {
         {6, 7},
         {7, 8}
     };
+    
 
     if (sousMat2(4, 5, 2, 2, A, B))
         printf("B est dans A !\n");
