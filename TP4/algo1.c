@@ -111,16 +111,12 @@ int main() {
         double somme2 = 0.0;
 
         for (int k = 0; k < 10; k++) {
-            remplir_aleatoire(T, n);
-            copier_tableau(T, Tcopy, n);
-            somme1 += TriBulle(Tcopy, n);
-        }
-
-        for (int k = 0; k < 10; k++) {
-            remplir_aleatoire(T, n);
-            copier_tableau(T, Tcopy, n);
-            somme2 += TriBulleOpt(Tcopy, n);
-        }
+    remplir_aleatoire(T, n);       // T = tableau aléatoire
+    copier_tableau(T, Tcopy, n);
+    somme1 += TriBulle(Tcopy, n);
+    //copier_tableau(T, Tcopy, n);   // recopie T
+    somme2 += TriBulleOpt(T, n);
+}
 
         double moy1 = somme1 / 10.0;
         double moy2 = somme2 / 10.0;
