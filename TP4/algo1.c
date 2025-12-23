@@ -88,7 +88,7 @@ void copier_tableau(int src[], int dest[], int n) {
 int main() {
     srand((unsigned int)time(NULL));
 
-    int tailles[] = {100, 200, 300, 400, 500};
+    int tailles[] = {10000, 20000, 50000, 100000, 200000, 300000, 400000};
     int nbTailles = sizeof(tailles) / sizeof(tailles[0]);
 
     FILE *f = fopen("Algo1.csv", "w");
