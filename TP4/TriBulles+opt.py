@@ -36,7 +36,7 @@ for algo in subset[col_algo].unique():
 plt.xlabel("Taille du tableau (n)")  
 plt.ylabel("Temps d'exécution moyen (s)") 
 plt.title("Évolution du temps d'exécution en fonction de n")
-
+plt.ticklabel_format(style='plain', axis='x')
 plt.legend()
 plt.grid(True)
 plt.show()
