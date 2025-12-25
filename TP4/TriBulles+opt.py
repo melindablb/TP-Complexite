@@ -1,10 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Mettre le fichier CSV ici
+# Fichier CSV
 csv_file = "Algo1.csv" 
 
-# Lire le fichier CSV
+# Lire le CSV
 data = pd.read_csv(csv_file)
 
 # Colonnes à adapter selon votre CSV
@@ -12,17 +12,26 @@ col_algo = "num_algo"
 col_n = "n"              
 col_time = "temps_moyen"   
 
-# Filtrer uniquement l'algo 1
-subset = data[data[col_algo] == 2]
+# Filtrer uniquement les algos qui nous intéressent
+subset = data[data[col_algo].isin([1, 2])]  # ici on prend 1 et 2, par exemple
 
-# Tracer
 plt.figure()
-plt.plot(
-    subset[col_n],
-    subset[col_time],
-    marker='o',
-    label="Algo 2 : Tri à bulles optimisé"
-)
+
+for algo in subset[col_algo].unique():
+    algo_subset = subset[subset[col_algo] == algo]
+    
+    # Choix du label selon la valeur de num_algo
+    if algo == 1:
+        label = "Tri à bulles"
+    else:
+        label = "Tri à bulles optimisé"
+    
+    plt.plot(
+        algo_subset[col_n],
+        algo_subset[col_time],
+        marker='o',
+        label=label
+    )
 
 plt.xlabel("Taille du tableau (n)")  
 plt.ylabel("Temps d'exécution moyen (s)") 

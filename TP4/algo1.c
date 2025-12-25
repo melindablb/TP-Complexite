@@ -88,7 +88,7 @@ void copier_tableau(int src[], int dest[], int n) {
 int main() {
     srand((unsigned int)time(NULL));
 
-    int tailles[] = {10000, 20000, 50000, 100000, 200000, 300000, 400000};
+    int tailles[] = {10000, 20000, 50000, 100000, 200000, 500000, 1000000};
     int nbTailles = sizeof(tailles) / sizeof(tailles[0]);
 
     FILE *f = fopen("Algo1.csv", "w");
@@ -111,7 +111,7 @@ int main() {
         double somme2 = 0.0;
 
         for (int k = 0; k < 10; k++) {
-    remplir_aleatoire(T, n);       // T = tableau aléatoire
+    remplir_aleatoire(T, n);    
     copier_tableau(T, Tcopy, n);
     somme1 += TriBulle(Tcopy, n);
     //copier_tableau(T, Tcopy, n);   // recopie T
